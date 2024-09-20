@@ -13,29 +13,49 @@ import Observation
 class ViewModel {
     var notes: [Note]
     
+    var createNoteUseCase: CreateNoteUseCase
+    var fetchAllNotesUseCase: FetchAllNotesUseCase
+    
     //array vacio cada que se cree instancia del viewmodel
-    init(notes: [Note] = []) {
+    init(notes: [Note] = [],
+         createNoteUseCase: CreateNoteUseCase = CreateNoteUseCase(),
+         fetchAllNotesUseCase: FetchAllNotesUseCase = FetchAllNotesUseCase()) {
         self.notes = notes
+        self.createNoteUseCase = createNoteUseCase
+        self.fetchAllNotesUseCase = fetchAllNotesUseCase
+        fetchAllNotes() //recuperando la info de la bd
     }
     
     func createNoteWith(title: String, text: String) {
-        let note: Note = .init(title: title, text: text, createdAt: .now)
-        notes.append(note)
+        do {
+            try createNoteUseCase.createNoteWith(title: title, text: text)
+            fetchAllNotes()
+        } catch {
+            print("error \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchAllNotes() {
+        do {
+            notes = try fetchAllNotesUseCase.fetchAll()
+        } catch {
+            print("error \(error.localizedDescription)")
+        }
     }
     
     //id -> para actualizar la nota
-    func updateNoteWith(id: UUID, newTitle: String, newText: String?) {
+    func updateNoteWith(identifier: UUID, newTitle: String, newText: String?) {
         
         //buscamos la nota dentro del array
-        if let index = notes.firstIndex(where: { $0.id == id }) {
+        if let index = notes.firstIndex(where: { $0.identifier == identifier }) {
             //actualizamos nota
-            let updateNote = Note(id: id, title: newTitle, text: newText, createdAt: notes[index].createdAt)
+            let updateNote = Note(identifier: identifier, title: newTitle, text: newText, createdAt: notes[index].createdAt )
             //añdaimos en posicion donde estaba la nota
             notes[index] = updateNote
         }
     }
     
-    func removeNoteWith(id: UUID) {
-        notes.removeAll(where: { $0.id == id })
+    func removeNoteWith(identifier: UUID) {
+        notes.removeAll(where: { $0.identifier == identifier })
     }
 }

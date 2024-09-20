@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UpdateNoteView: View {
     var viewModel: ViewModel
-    let id: UUID //SABER QUE NOTA BUSCAR PARA EL NUEVO VALOR
+    let identifier: UUID //SABER QUE NOTA BUSCAR PARA EL NUEVO VALOR
     
     //propiedades que se actualizan
     @State var title: String = ""
@@ -30,7 +30,7 @@ struct UpdateNoteView: View {
                 }
             }
             Button(action: {
-                viewModel.removeNoteWith(id: id)
+                viewModel.removeNoteWith(identifier: identifier)
                 dismiss()
             }, label: {
                 Text("Eliminar nota")
@@ -46,7 +46,7 @@ struct UpdateNoteView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     //se actualiza la nota
-                    viewModel.updateNoteWith(id: id, newTitle: title, newText: text)
+                    viewModel.updateNoteWith(identifier: identifier, newTitle: title, newText: text)
                     dismiss()
                 } label: {
                     Text("Guardar")
@@ -60,6 +60,6 @@ struct UpdateNoteView: View {
 
 #Preview {
     NavigationStack {
-        UpdateNoteView(viewModel: .init(), id: .init(), title: "Suscribete", text: "Aprende swift, blablablabalabalbla")
+        UpdateNoteView(viewModel: .init(), identifier: .init(), title: "Suscribete", text: "Aprende swift, blablablabalabalbla")
     }
 }
