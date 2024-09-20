@@ -13,13 +13,14 @@ import Observation
 class ViewModel {
     var notes: [Note]
     
-    var createNoteUseCase: CreateNoteUseCase
-    var fetchAllNotesUseCase: FetchAllNotesUseCase
+    var createNoteUseCase: CreateNoteProtocol
+    var fetchAllNotesUseCase: FetchAllNotesProtocol
     
     //array vacio cada que se cree instancia del viewmodel
     init(notes: [Note] = [],
-         createNoteUseCase: CreateNoteUseCase = CreateNoteUseCase(),
-         fetchAllNotesUseCase: FetchAllNotesUseCase = FetchAllNotesUseCase()) {
+         createNoteUseCase: CreateNoteProtocol = CreateNoteUseCase(),
+         fetchAllNotesUseCase: FetchAllNotesProtocol = FetchAllNotesUseCase()
+    ) {
         self.notes = notes
         self.createNoteUseCase = createNoteUseCase
         self.fetchAllNotesUseCase = fetchAllNotesUseCase

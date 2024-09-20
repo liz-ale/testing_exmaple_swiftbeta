@@ -8,11 +8,27 @@
 import XCTest
 @testable import Notas
 
+var mockDatabase: [Note] = []
+
+//en lugar de ir  a la BD, almacenamos
+struct CreateNoteUseCaseMock: CreateNoteProtocol {
+    func createNoteWith(title: String, text: String) throws {
+        let note = Note(title: title, text: text, createdAt: .now)
+        mockDatabase.append(note)
+    }
+}
+
+struct FetchAllNotesUseCaseMock: FetchAllNotesProtocol {
+    func fetchAll() throws -> [Note] {
+        return mockDatabase
+    }
+}
+
 final class ViewModelTests: XCTestCase {
     var viewModel: ViewModel!
 
     override func setUpWithError() throws {
-        viewModel = ViewModel()
+        viewModel = ViewModel(createNoteUseCase: CreateNoteUseCaseMock(), fetchAllNotesUseCase: FetchAllNotesUseCaseMock())
     }
 
     override func tearDownWithError() throws {

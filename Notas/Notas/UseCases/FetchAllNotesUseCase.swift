@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct FetchAllNotesUseCase {
+protocol FetchAllNotesProtocol {
+    func fetchAll() throws -> [Note]
+}
+
+struct FetchAllNotesUseCase: FetchAllNotesProtocol {
     
     //referencia a la BD mediante abstraccion
     var notesDatabase: NotesDatabaseProtocol
